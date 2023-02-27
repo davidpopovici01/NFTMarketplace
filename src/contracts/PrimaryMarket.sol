@@ -34,6 +34,10 @@ contract PrimaryMarket is IPrimaryMarket {
             _purchaseToken.balanceOf(msg.sender) >= TOKEN_PRICE,
             "insufficient balance"
         );
+        require(
+            _purchaseToken.allowance(msg.sender, address(this)) >= TOKEN_PRICE,
+            "insufficient allowance"
+        );
         _purchaseToken.transferFrom(msg.sender, _admin, TOKEN_PRICE);
         _ticketNFT.mint(msg.sender, holderName);
         minted += 1;

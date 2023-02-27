@@ -28,4 +28,9 @@ interface IPrimaryMarket {
      * and transfers ERC20 tokens from the purchaser to the admin of this contract
      */
     function purchase(string memory holderName) external;
+
+    /**
+     * @dev Returns the address of the NFT contract that is being minted by this contract.
+     */
+    function getTicketNFT() external view returns (address);
 }

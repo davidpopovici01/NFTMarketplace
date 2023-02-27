@@ -11,7 +11,7 @@ contract TicketNFT is ITicketNFT {
 
     struct TicketMeta {
         uint256 ID;
-        string name;
+        string holderName;
         uint256 timestamp;
         bool used;
     }
@@ -28,7 +28,7 @@ contract TicketNFT is ITicketNFT {
 
     function mint(address holder, string memory holderName) external {
         require(
-            msg.sender == _primaryMarket,
+            msg.sender == address(_primaryMarket),
             "Tickets can only be minted by the primary market"
         );
         uint256 currID = lastID + 1;
@@ -59,10 +59,12 @@ contract TicketNFT is ITicketNFT {
         require(to != address(0), "cannot transfer to zero address");
         address owner = _owner[ticketID];
         require(
-            owner == msg.sender || getApproved(ticketID) == msg.sender,
+            owner == msg.sender || _approved[ticketID] == msg.sender,
             "ticket is neither owned by sender nor approved for transfer"
         );
+        _balance[from] -= 1;
         _owner[ticketID] = to;
+        _balance[to] += 1;
         _approved[ticketID] = address(0);
         emit Transfer(from, to, ticketID);
         emit Approval(to, address(0), ticketID);

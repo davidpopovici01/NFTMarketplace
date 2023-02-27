@@ -34,6 +34,10 @@ contract SecondaryMarket is ISecondaryMarket {
         require(
             !_ticketNFT.isExpiredOrUsed(ticketID),
             "ticket is expired or used");
+        require(
+            _listing[ticketID].holder = address(0),
+            "ticket is already listed"
+        );
         _listing[ticketID] = TicketMeta(msg.sender, price);
         _ticketNFT.transferFrom(msg.sender, address(this), ticketID);
         emit Listing(ticketID, msg.sender, price);
@@ -41,12 +45,12 @@ contract SecondaryMarket is ISecondaryMarket {
 
     function delistTicket(uint256 ticketID) external {
         require(
-            _listing[ticketID].holder == msg.sender,
-            "only the ticket holder can delist the ticket"
-        );
-        require(
             _listing[ticketID].holder != address(0),
             "ticket is not listed"
+        );
+        require(
+            _listing[ticketID].holder == msg.sender,
+            "only the ticket holder can delist the ticket"
         );
         _ticketNFT.transferFrom(address(this), msg.sender, ticketID);
         delete _listing[ticketID];

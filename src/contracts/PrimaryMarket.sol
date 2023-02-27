@@ -9,8 +9,8 @@ import "./TicketNFT.sol";
 contract PrimaryMarket is IPrimaryMarket {
     address public _admin;
     IERC20 public immutable _purchaseToken;
-    uint256 public immutable TOKEN_PRICE = 100e18;
-    uint256 public immutable TOKEN_LIMIT = 1000;
+    uint256 public constant TOKEN_PRICE = 100e18;
+    uint256 public constant TOKEN_LIMIT = 1000;
     ITicketNFT public _ticketNFT;
     uint256 public minted = 0;
 

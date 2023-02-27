@@ -63,10 +63,6 @@ contract TicketNFT is ITicketNFT {
             owner == msg.sender || _approved[ticketID] == msg.sender,
             "ticket is neither owned by sender nor approved for transfer"
         );
-        require(
-            from = owner, 
-            "ticket is not owned by the from address"
-        );
         _balance[from] -= 1;
         _owner[ticketID] = to;
         _balance[to] += 1;
@@ -77,8 +73,8 @@ contract TicketNFT is ITicketNFT {
 
     function approve(address to, uint256 ticketID) external {
         address owner = _owner[ticketID];
-        require(owner == msg.sender, "caller does not own ticket");
         require(ticketID <= lastID, "ticket does not exist");
+        require(owner == msg.sender, "caller does not own ticket");
         _approved[ticketID] = to;
         emit Approval(msg.sender, to, ticketID);
     }

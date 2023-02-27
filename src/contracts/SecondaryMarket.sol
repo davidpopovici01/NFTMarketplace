@@ -35,7 +35,7 @@ contract SecondaryMarket is ISecondaryMarket {
             !_ticketNFT.isExpiredOrUsed(ticketID),
             "ticket is expired or used");
         require(
-            _listing[ticketID].holder = address(0),
+            _listing[ticketID].holder == address(0),
             "ticket is already listed"
         );
         _listing[ticketID] = TicketMeta(msg.sender, price);

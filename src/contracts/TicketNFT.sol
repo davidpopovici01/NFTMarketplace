@@ -57,10 +57,15 @@ contract TicketNFT is ITicketNFT {
     ) external {
         require(from != address(0), "cannot transfer from zero address");
         require(to != address(0), "cannot transfer to zero address");
+        require(ticketID <= lastID, "ticket does not exist");
         address owner = _owner[ticketID];
         require(
             owner == msg.sender || _approved[ticketID] == msg.sender,
             "ticket is neither owned by sender nor approved for transfer"
+        );
+        require(
+            from = owner, 
+            "ticket is not owned by the from address"
         );
         _balance[from] -= 1;
         _owner[ticketID] = to;
@@ -83,6 +88,7 @@ contract TicketNFT is ITicketNFT {
         view
         returns (address operator)
     {
+        require(ticketID <= lastID, "ticket does not exist");
         return _approved[ticketID];
     }
 
@@ -91,6 +97,7 @@ contract TicketNFT is ITicketNFT {
         view
         returns (string memory holderName)
     {
+        require(ticketID <= lastID, "ticket does not exist");
         return _IDtoOwner[ticketID].holderName;
     }
 
@@ -105,7 +112,7 @@ contract TicketNFT is ITicketNFT {
 
     function setUsed(uint256 ticketID) external {
         require(ticketID <= lastID, "ticket does not exist");
-        require(!_IDtoOwner[ticketID].used, "ticker already used");
+        require(!_IDtoOwner[ticketID].used, "ticket already used");
         require(block.timestamp < _IDtoOwner[ticketID].timestamp, "ticket expired");
         require(msg.sender == _primaryMarket.admin(), "caller not the admin of the primary market");
         _IDtoOwner[ticketID].used = true;
